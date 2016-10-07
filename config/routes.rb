@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
-  get 'home', to: 'home#index'
+  
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: 'index#index'
+  get 'home', to: 'home#index'
+  post 'users/create', to: 'users#create'
+  post 'users/login', to: 'users#login'
 end

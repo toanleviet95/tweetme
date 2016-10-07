@@ -36,20 +36,17 @@
                       <h4 class="m-b-0"><span class="icon-text">Login</span></h4>
                       <p class="text-muted">Access your account</p>
                     </div>
-                    <form action="index.html" method="get">
+                    <%= form_tag('users/login', remote: true) do %>
                       <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Username">
+                        <input type="text" name="username" class="form-control" placeholder="Username" required>
                       </div>
                       <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="center">
-                        <a href="profile.html" class="btn  btn-azure">
-                          Login
-                        </a>
-                      </div>
-                    </form>
+                      <button type="submit" class="btn btn-azure">Login</button>
+                    <% end %>
+                    <div id="result_login"></div>
                   </div>
                 </div>
                 <div class="card">
@@ -58,21 +55,22 @@
                       <span class="icon-text">Sign Up</span>
                     </h4>
                     <p class="text-muted">Create a new account</p>
-                    <form action="index.html" method="get">
+                    <%= form_tag('users/create', remote: true) do %>
                       <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Full Name">
+                        <input type="text" name="fullname" class="form-control" placeholder="Full Name" required>
                       </div>
                       <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Username">
+                        <input type="text" name="username" class="form-control" placeholder="Username" required>
                       </div>
                       <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
                       </div>
                       <div class="form-group">
-                        <input type="password" class="form-control" placeholder="Confirm Password">
+                        <input type="password" name="confirm" class="form-control" placeholder="Confirm Password" required>
                       </div>
                       <button type="submit" class="btn btn-azure">Register</button>
-                    </form>
+                    <% end %>
+                    <div id="result_register"></div>
                   </div>
                 </div>
               </div>

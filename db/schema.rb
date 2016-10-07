@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161006104929) do
+ActiveRecord::Schema.define(version: 20161007163633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,9 +25,9 @@ ActiveRecord::Schema.define(version: 20161006104929) do
     t.string  "twitter"
     t.string  "facebook"
     t.string  "skype"
-    t.integer "followers"
-    t.integer "following"
-    t.integer "posts"
+    t.integer "followers", default: 0
+    t.integer "following", default: 0
+    t.integer "posts",     default: 0
   end
 
 end
