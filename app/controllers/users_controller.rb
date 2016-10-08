@@ -30,9 +30,11 @@ class UsersController < ApplicationController
 			@result_register = '*Password has at least 6 characters'
 			@color_register = 'red'
 		else
-			User.create(fullname: fullname, username: username, password: password)
-			@result_register = 'Your account has been created. Please login tweetme'
-			@color_register = 'green'
+			user = User.create(fullname: fullname, username: username, password: password)
+			if user.valid?
+				@result_register = 'Your account has been created. Please login tweetme'
+				@color_register = 'green'
+			end
 		end
 	end
 end

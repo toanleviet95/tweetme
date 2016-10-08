@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   get 'home', to: 'home#index'
   post 'users/create', to: 'users#create'
   post 'users/login', to: 'users#login'
+  post 'tweets/create', to: 'tweets#create'
 end
