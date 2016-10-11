@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap.min
+//= require jquery.easy-autocomplete.min
 //= require script

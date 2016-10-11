@@ -1,0 +1,9 @@
+var content = '<%= form_tag("/follows/create", remote: true) do %>'
+content += '<%= hidden_field_tag "user_id", @user_followed.id %>'
+content += "<button type='submit' class='btn btn-azure'>"
+content += "<i class='fa fa-eye'></i>"
+content += "Follow"
+content += " </button>"
+content += "<% end %>"
+$('#user_followers').text('<%= @user_followed.followers %>');
+$('#btn_follow').html(content);

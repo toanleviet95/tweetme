@@ -7,7 +7,7 @@
             <div class="widget">
               <div class="widget-body">
                 <div class="user-heading round">
-                  <a href="#">
+                  <a href="/profile">
                       <%= image_tag "profile_default.png" %>
                   </a>
                   <h1><%= @user.fullname %></h1>
@@ -31,7 +31,6 @@
                   <div class="box profile-info n-border-top">
                     <%= form_tag('tweets/create', :id=>'post_tweet', remote: true) do %>
                         <textarea name="your_mind" id="your_mind" class="form-control input-lg p-text-area" rows="2" placeholder="Whats in your mind today?"></textarea>
-                        <div id = 'cont'></div>
                     <% end %>
                     <div class="box-footer box-form">
 
@@ -86,7 +85,6 @@
                         </div>
                       <% end %>
                     </div>
-                    <div id="noi_dung"></div>
                   </div>
                   <% end %>
                 </div>
@@ -106,6 +104,7 @@
               <div class="card">
                   <div class="content">
                       <ul class="list-unstyled team-members">
+                      <% @people_may_know.each do |people| %>
                           <li>
                               <div class="row">
                                   <div class="col-xs-3">
@@ -114,46 +113,15 @@
                                       </div>
                                   </div>
                                   <div class="col-xs-6">
-                                     Carlos marthur
+                                     <%= people.fullname %>
                                   </div>
                       
                                   <div class="col-xs-3 text-right">
-                                      <btn class="btn btn-sm btn-azure btn-icon"><i class="fa fa-user-plus"></i></btn>
+                                      <a href="/profile/<%= people.id %>" class="btn btn-sm btn-azure btn-icon"><i class="fa fa-user-plus"></i></a>
                                   </div>
                               </div>
                           </li>
-                          <li>
-                              <div class="row">
-                                  <div class="col-xs-3">
-                                      <div class="avatar">
-                                          <%= image_tag "profile_default.png", :class=>"img-responsive img-circle img-no-padding" %>
-                                      </div>
-                                  </div>
-                                  <div class="col-xs-6">
-                                      Maria gustami
-                                  </div>
-                      
-                                  <div class="col-xs-3 text-right">
-                                      <btn class="btn btn-sm btn-azure btn-icon"><i class="fa fa-user-plus"></i></btn>
-                                  </div>
-                              </div>
-                          </li>
-                          <li>
-                              <div class="row">
-                                  <div class="col-xs-3">
-                                      <div class="avatar">
-                                          <%= image_tag "profile_default.png", :class=>"img-responsive img-circle img-no-padding" %>
-                                      </div>
-                                  </div>
-                                  <div class="col-xs-6">
-                                      Angellina mcblown
-                                  </div>
-                      
-                                  <div class="col-xs-3 text-right">
-                                      <btn class="btn btn-sm btn-azure btn-icon"><i class="fa fa-user-plus"></i></btn>
-                                  </div>
-                              </div>
-                          </li>
+                          <% end %>
                       </ul>
                   </div>
               </div>          

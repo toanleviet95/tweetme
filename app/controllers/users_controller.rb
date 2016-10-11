@@ -37,4 +37,14 @@ class UsersController < ApplicationController
 			end
 		end
 	end
+	def logout
+		session.delete(:user_id)
+		redirect_to "/"
+	end
+	def getjson
+	  	@users_search = User.all
+	  	respond_to do |format|
+       format.json { render :json => @users_search }
+     end
+	end
 end

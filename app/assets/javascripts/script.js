@@ -20,5 +20,5 @@ $(document).ready(function(){
 			$("#btn_tweet").css('opacity','1').css('cursor','pointer');
 			$('#character_number').css('color','black');
 		});
-	});
+	});	
 });

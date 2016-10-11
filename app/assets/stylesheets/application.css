@@ -18,5 +18,7 @@
  *= require forms
  *= require login_register
  *= require timeline
-  *= require style
+ *= require profile
+ *= require easy-autocomplete.min
+ *= require style
  */

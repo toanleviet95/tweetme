@@ -1,0 +1,437 @@
+<!-- Begin page content -->
+    <div class="container page-content">
+      <div class="row" id="user-profile">
+        <div class="col-md-4 col-xs-12">
+          <div class="row-xs">
+            <div class="main-box clearfix">
+              <h2><%= @user.fullname %></h2>
+              <div class="profile-status">
+                <i class="fa fa-check-circle"></i> Online
+              </div>
+              <%= image_tag "profile_default.png", :class=>"profile-img img-responsive center-block show-in-modal" %>
+              
+              <div class="profile-details">
+                <ul class="fa-ul">
+                  <li><i class="fa-li fa fa-user"></i>Following: <span id="user_following"><%= @user.following %></span></li>
+                  <li><i class="fa-li fa fa-users"></i>Followers: <span id="user_followers"><%= @user.followers %></span></li>
+                  <li><i class="fa-li fa fa-comments"></i>Tweet: <span id="count_tweets"><%= @user.posts %></span></li>
+                </ul>
+              </div>
+              
+              <div class="profile-message-btn center-block text-center">
+              <% if @user.id == session[:user_id] %>
+                <a href="#" class="btn btn-azure">
+                  <i class="fa fa-edit"></i>
+                  Edit profile
+                </a>
+                <% else %>
+                  <div id="btn_follow">
+                  <% if !Follow.exists?(user_id: @user.id, follower_id: session[:user_id]) %>
+                  <%= form_tag('/follows/create', remote: true) do %>
+                  <%= hidden_field_tag 'user_id', @user.id %>
+                    <button type="submit" class="btn btn-azure">
+                    <i class="fa fa-eye"></i>
+                    Follow
+                  </button>
+                  <% end %>
+                  <% else %>
+                  <%= form_tag('/follows/delete', remote: true) do %>
+                  <%= hidden_field_tag 'user_id', @user.id %>
+                    <button type="submit" class="btn btn-azure">
+                    <i class="fa fa-eye-slash"></i>
+                    Unfollow
+                  </button>
+                  <% end %>
+                  <% end %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-8 col-xs-12">
+          <div class="row-xs">
+            <div class="main-box clearfix">
+              <div class="row profile-user-info">
+                <div class="col-sm-8">
+                  <div class="profile-user-details clearfix">
+                    <div class="profile-user-details-label">
+                      Fullname
+                    </div>
+                    <div class="profile-user-details-value">
+                      <%= @user.fullname %>
+                    </div>
+                  </div>
+                  <div class="profile-user-details clearfix">
+                    <div class="profile-user-details-label">
+                      Username
+                    </div>
+                    <div class="profile-user-details-value">
+                      <%= @user.username %>
+                    </div>
+                  </div>
+                  <% if !@user.address.nil? %>
+                  <div class="profile-user-details clearfix">
+                    <div class="profile-user-details-label">
+                      Address
+                    </div>
+                    <div class="profile-user-details-value">
+                      <%= @user.address %>
+                    </div>
+                  </div>
+                  <% end %>
+                  <% if !@user.email.nil? %>
+                  <div class="profile-user-details clearfix">
+                    <div class="profile-user-details-label">
+                      Email
+                    </div>
+                    <div class="profile-user-details-value">
+                      <%= @user.email %>
+                    </div>
+                  </div>
+                  <% end %>
+                  <% if !@user.phone.nil? %>
+                  <div class="profile-user-details clearfix">
+                    <div class="profile-user-details-label">
+                      Phone number
+                    </div>
+                    <div class="profile-user-details-value">
+                      <%= @user.phone %>
+                    </div>
+                  </div>
+                  <% end %>
+                </div>
+                <div class="col-sm-4 profile-social">
+                  <ul class="fa-ul">
+                    <li><i class="fa-li fa fa-twitter-square"></i><a href="#">twitter</a></li>
+                    <li><i class="fa-li fa fa-facebook-square"></i><a href="#">Facebook</a></li>
+                    <li><i class="fa-li fa fa-skype"></i><a href="#">Skype</a></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="tabs-wrapper profile-tabs">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab-timeline" data-toggle="tab">Timeline</a></li>
+                  <li><a href="#tab-following" data-toggle="tab">Following</a></li>
+                  <li><a href="#tab-followers" data-toggle="tab">Followers</a></li>
+                </ul>
+                
+                <div class="tab-content">
+                  <div class="tab-pane fade in active" id="tab-timeline">
+                    <div class="row">
+                      <div class="col-md-12">
+                      <!-- post state form -->
+                  <% if @user.id == session[:user_id] %>
+                  <div class="box profile-info n-border-top">
+                    <%= form_tag('tweets/create', :id=>'post_tweet', remote: true) do %>
+                        <textarea name="your_mind" id="your_mind" class="form-control input-lg p-text-area" rows="2" placeholder="Whats in your mind today?"></textarea>
+                        <div id = 'cont'></div>
+                    <% end %>
+                    <div class="box-footer box-form">
+
+                        <button id="btn_tweet" type="submit" form="post_tweet" class="btn btn-azure pull-right"><i class="fa fa-paper-plane-o" aria-hidden="true"></i>Tweet</button>
+                        <span id="character_number">140</span>
+                        <ul class="nav nav-pills">
+                            <!-- <li><a href="#"><i class="fa fa-map-marker"></i></a></li>
+                            <li><a href="#"><i class="fa fa-camera"></i></a></li>
+                            <li><a href="#"><i class=" fa fa-film"></i></a></li>
+                            <li><a href="#"><i class="fa fa-microphone"></i></a></li> -->
+                        </ul>
+                    </div>
+                  </div><!-- end post state form -->
+                  <% end %>
+                  <div id="list_tweets">
+                    <% @tweets.each do |tweet| %>
+                        <!--   posts -->
+                        <div class="box box-widget">
+                          <div class="box-header with-border">
+                            <div class="user-block">
+                              <%= image_tag "profile_default.png", :class=>"img-circle" %>
+                              <span class="username"><a href=""><%= @user.fullname %></a></span>
+                              <span class="description"><%= l(tweet.created_at.localtime, format: :sample) %></span>
+                            </div>
+                          </div>
+
+                          <div class="box-body" style="display: block;">
+                            <p style="word-wrap: break-word"><%= tweet.content %></p>
+                            <button type="button" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
+                            <span class="pull-right text-muted"><span><%= tweet.like_num %></span> likes - <span><%= tweet.comment_num %></span> comments</span>
+                          </div>
+                          <div class="box-footer box-comments" style="display: block;" id="comment_<%= tweet.id %>">
+                            <% comments = Comment.where(tweet_id: tweet.id).all %>
+                            <% comments.each do |comment| %>
+                            <div class="box-comment">
+                              <%= image_tag "profile_default.png", :class=>"img-circle img-sm" %>
+                              <div class="comment-text">
+                                <span class="username">
+                                <% user = User.find_by_id(comment.user_id) %>
+                                <%= user.fullname %>
+                                <span class="text-muted pull-right"><%= l(comment.created_at.localtime, format: :sample) %></span>
+                                </span>
+                                <%= comment.content %>
+                              </div>
+                            </div>
+                            <% end %>
+                          </div>
+                          <div class="box-footer" style="display: block;">
+                            <%= form_tag('comments/create', :class=> 'form_comment', remote: true) do %>
+                            <%= image_tag "profile_default.png", :class=>"img-responsive img-circle img-sm" %>
+                            <div class="img-push">
+                            <%= hidden_field_tag 'tweet_id', tweet.id %>
+                              <input type="text" id="content_comment_<%= tweet.id %>" name="content_comment" class="form-control input-sm post_comment" placeholder="Press enter to post comment">
+                            </div>
+                          <% end %>
+                          </div>
+                        </div><!--  end posts-->
+                        <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- <div class="tab-pane fade" id="tab-following">
+                    <ul class="widget-users row">
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-3.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Mileth zanders</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: 5 minutes ago
+                          </div>
+                          <div class="type">
+                            <span class="label label-danger">Admin</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-3.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Mila Kendrichk</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                          <div class="type">
+                            <span class="label label-warning">Pending</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-1.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Arnold Thossling</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-2.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Peter Downey</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: Thursday
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-3.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Emiliath Suansont</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: 1 week ago
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-6.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Briatng bowingy</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: 1 month ago
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-4.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Milanith Grotyu</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                          <div class="type">
+                            <span class="label label-warning">Pending</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-5.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Trwort Htrew</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <br>
+                    <a href="#" class="btn btn-azure pull-right">
+                      <i class="fa fa-refresh"></i>
+                      Load more
+                    </a>
+                  </div>
+                  
+                  <div class="tab-pane fade" id="tab-followers">
+                    <ul class="widget-users row">
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-6.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Danielath grande</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: 5 minutes ago
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-4.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Fernanda Hytrod</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-1.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Arnold Thossling</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-2.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Peter Downey</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: Thursday
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-3.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Emiliath Suansont</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: 1 week ago
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-6.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Briatng bowingy</a>
+                          </div>
+                          <div class="time">
+                            <i class="fa fa-clock-o"></i> Last online: 1 month ago
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/woman-4.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Milanith Grotyu</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                        </div>
+                      </li>
+                      <li class="col-md-6">
+                        <div class="img">
+                          <img src="img/Friends/guy-5.jpg" alt="">
+                        </div>
+                        <div class="details">
+                          <div class="name">
+                            <a href="#">Trwort Htrew</a>
+                          </div>
+                          <div class="time online">
+                            <i class="fa fa-check-circle"></i> Online
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <br>
+                    <a href="#" class="btn btn-azure pull-right">
+                      <i class="fa fa-refresh"></i>
+                      Load more
+                    </a>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
