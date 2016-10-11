@@ -1,16 +1,17 @@
+<% if !@tweet.nil? %>
 var content = '<div class="box box-widget">'
 content +=          '<div class="box-header with-border">'
 content +=               '<div class="user-block">'
 content +=                   '<%= image_tag "profile_default.png", :class=>"img-circle" %>'
 content +=                         '<span class="username"><a href="#"><%= @user.fullname %></a></span>'
-content +=                         '<span class="description">'+'<%= @tweet.content %>'+'</span>'
+content +=                         '<span class="description">'+'<%= l(@tweet.created_at.localtime, format: :sample) %>'+'</span>'
 content +=                       '</div>'
 content +=                     '</div>'
 
 content +=                    '<div class="box-body" style="display: block;">'
-content +=                      '<p>'+'<%= @tweet.content %>'+'</p>'
+content +=                      '<p style="word-wrap: break-word">'+'<%= @tweet.content %>'+'</p>'
 content +=                      '<button type="button" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>'
-content +=                      '<span class="pull-right text-muted"></span>'
+content +=                      '<span class="pull-right text-muted"><%= @tweet.like_num %> likes - <%= @tweet.comment_num %> comments</span>'
 content +=                    '</div>'
 content +=                    '<div class="box-footer" style="display: block;">'
 content +=                      '<form action="#" method="post">'
@@ -22,4 +23,8 @@ content +=                      '</form>'
 content +=                    '</div>'
 content +=                  '</div>' 
 
-$("#list_tweets").prepend(content);
+var current_count = $("#count_tweets").text()
+current_count = current_count*1 + 1
+$("#count_tweets").text(current_count)
+$("#list_tweets").prepend(content)
+<% end %>

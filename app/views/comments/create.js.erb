@@ -1,0 +1,15 @@
+<% if !@comment.nil? and !@comment_num.nil? %>
+var content = '<div class="box-comment">'
+content +=          '<%= image_tag "profile_default.png", :class=>"img-circle img-sm" %>'
+content +=               '<div class="comment-text">'
+content +=                   '<span class="username">'
+content +=                         '<%= @user.fullname %>'
+content +=                         '<span class="text-muted pull-right"><%= l(@comment.created_at.localtime, format: :sample) %></span>'
+content +=                       '</span>'
+content +=                     '<%= @comment.content %>'
+content +=                    '</div>'
+content +=                      '</div>'
+$("#comment_num_<%= @comment.tweet_id %>").text('<%= @comment_num %>')
+$("#comment_<%= @comment.tweet_id %>").append(content)
+$("#content_comment_<%= @comment.tweet_id %>").val('')
+<% end %>

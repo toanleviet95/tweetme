@@ -6,7 +6,7 @@ class CreateTweets < ActiveRecord::Migration[5.0]
       t.integer :like_num, :default => 0
       t.integer :comment_num, :default => 0
       t.integer :user_id
-      t.timestamps :date_created
+      t.timestamps
     end
   end
 end

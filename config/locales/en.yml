@@ -21,3 +21,6 @@
 
 en:
   hello: "Hello world"
+  time:
+      formats:
+        sample: '%d/%m/%Y %H:%M'
