@@ -4,7 +4,7 @@
 
 Danh sách sinh viên: **Lê Viết Toàn (1312604) - Đinh Thị Tường Vi (1312691)**
 
-URL: **Insert your Heroku URL here**
+URL: **https://tweetme.herokuapp.com/**
 
 ## Chức năng
 
